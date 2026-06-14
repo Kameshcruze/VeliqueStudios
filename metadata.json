@@ -1,0 +1,6 @@
+{
+  "name": "Velique Studios",
+  "description": "Premium luxury fashion boutique lookbook catalog, featuring interactive coordinate checkout systems, automatic countdown drops, and dynamic style concierge scheduling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
