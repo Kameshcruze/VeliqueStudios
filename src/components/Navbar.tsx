@@ -7,9 +7,18 @@ interface NavbarProps {
   onOpenWishlist: () => void;
   cartCount: number;
   wishlistCount: number;
+  onProfileClick: () => void;
+  isAdminLoggedIn: boolean;
 }
 
-export default function Navbar({ onOpenCart, onOpenWishlist, cartCount, wishlistCount }: NavbarProps) {
+export default function Navbar({ 
+  onOpenCart, 
+  onOpenWishlist, 
+  cartCount, 
+  wishlistCount,
+  onProfileClick,
+  isAdminLoggedIn
+}: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -38,7 +47,7 @@ export default function Navbar({ onOpenCart, onOpenWishlist, cartCount, wishlist
   return (
     <nav
       id="velique-navbar"
-      className={`fixed top-0 left-0 w-full z-40 transition-all duration-500 select-none ${
+      className={`relative w-full z-40 transition-all duration-500 select-none ${
         isScrolled
           ? 'bg-[#F4FEFF]/80 backdrop-blur-md shadow-sm border-b border-[#A9C0E0]/20 py-3'
           : 'bg-transparent py-5'
@@ -103,10 +112,11 @@ export default function Navbar({ onOpenCart, onOpenWishlist, cartCount, wishlist
 
           {/* Account Profile Access */}
           <button
-            aria-label="Profile"
-            className="p-1.5 hover:bg-[#A9C0E0]/15 rounded-full transition-colors hidden sm:inline-block cursor-pointer"
+            onClick={onProfileClick}
+            aria-label={isAdminLoggedIn ? "Boutique Control Panel" : "Login"}
+            className="p-1.5 hover:bg-[#A9C0E0]/15 rounded-full transition-colors inline-block cursor-pointer font-sans"
           >
-            <User className="h-[18px] w-[18px] stroke-[1.8]" />
+            <User className={`h-[18px] w-[18px] stroke-[1.8] ${isAdminLoggedIn ? 'text-[#0E2F76] fill-[#0E2F76]/20' : ''}`} />
           </button>
 
           {/* Mobile Collapse Menu Button */}
@@ -133,19 +143,27 @@ export default function Navbar({ onOpenCart, onOpenWishlist, cartCount, wishlist
               {link.name}
             </a>
           ))}
-          <div className="flex gap-4 border-t border-neutral-100 pt-4 w-full justify-center">
+          <div className="flex flex-col items-center gap-4 border-t border-neutral-100 pt-4 w-full justify-center px-6">
+            <div className="flex gap-4">
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenWishlist(); }}
+                className="text-xs font-bold text-[#0E2F76] flex items-center gap-1.5 cursor-pointer"
+              >
+                <Heart className="h-4 w-4" /> Wishlist ({wishlistCount})
+              </button>
+              <span className="text-neutral-200">|</span>
+              <button
+                onClick={() => { setMobileMenuOpen(false); onOpenCart(); }}
+                className="text-xs font-bold text-[#0E2F76] flex items-center gap-1.5 cursor-pointer"
+              >
+                <ShoppingBag className="h-4 w-4" /> Bag ({cartCount})
+              </button>
+            </div>
             <button
-              onClick={() => { setMobileMenuOpen(false); onOpenWishlist(); }}
-              className="text-xs font-bold text-[#0E2F76] flex items-center gap-1.5 cursor-pointer"
+              onClick={() => { setMobileMenuOpen(false); onProfileClick(); }}
+              className="w-full text-xs font-black text-[#0E2F76] flex items-center justify-center gap-1.5 cursor-pointer border border-[#0E2F76]/30 rounded-md py-3 bg-[#F4FEFF] uppercase"
             >
-              <Heart className="h-4 w-4" /> Wishlist ({wishlistCount})
-            </button>
-            <span className="text-neutral-200">|</span>
-            <button
-              onClick={() => { setMobileMenuOpen(false); onOpenCart(); }}
-              className="text-xs font-bold text-[#0E2F76] flex items-center gap-1.5 cursor-pointer"
-            >
-              <ShoppingBag className="h-4 w-4" /> Bag ({cartCount})
+              <User className="h-4 w-4" /> {isAdminLoggedIn ? 'Boutique Control Panel' : 'Admin Login'}
             </button>
           </div>
         </div>

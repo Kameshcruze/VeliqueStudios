@@ -19,7 +19,7 @@ import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 
 // Icons
-import { ShoppingBag, Heart, Trash2, X, Plus, Minus, Calendar, Check, Sparkles, MessageSquare, AlertCircle } from 'lucide-react';
+import { ShoppingBag, Heart, Trash2, X, Plus, Minus, Calendar, Check, Sparkles, MessageSquare, AlertCircle, User } from 'lucide-react';
 
 export default function App() {
   // 1. Instantiante dynamic luxury boutique layout state
@@ -60,6 +60,41 @@ export default function App() {
   const [bookingEmail, setBookingEmail] = useState('');
   const [bookingName, setBookingName] = useState('');
   const [bookingSuccess, setBookingSuccess] = useState(false);
+
+  // Admin status and modal access states
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [adminPanelOpen, setAdminPanelOpen] = useState(false);
+  const [loginId, setLoginId] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (loginId.trim() === 'Admin' && loginPassword === '13572468') {
+      setIsAdminLoggedIn(true);
+      setLoginOpen(false);
+      setAdminPanelOpen(true);
+      setLoginId('');
+      setLoginPassword('');
+      setLoginError('');
+    } else {
+      setLoginError('Invalid credentials');
+    }
+  };
+
+  const handleAdminLogout = () => {
+    setIsAdminLoggedIn(false);
+    setAdminPanelOpen(false);
+  };
+
+  const handleProfileClick = () => {
+    if (isAdminLoggedIn) {
+      setAdminPanelOpen(true);
+    } else {
+      setLoginOpen(true);
+    }
+  };
 
   // Cart operations
   const handleAddToCart = (product: ProductItem, size: string) => {
@@ -147,16 +182,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-[#F4FEFF] font-sans antialiased text-neutral-850 select-none selection:bg-[#0E2F76]/10 scroll-smooth">
       
-      {/* SECTION 11 — ANNOUNCEMENT OFFER TICKER AT TOP */}
-      <MovingOfferBar texts={config.brand.offerTickerTexts} />
+      {/* GLOBAL VIEWPORT FIXED HEADER (STORES ANNOUNCEMENT BAR & NAVBAR STACKED PERFECTLY) */}
+      <header className="fixed top-0 left-0 w-full z-45 flex flex-col pointer-events-auto">
+        {/* SECTION 11 — ANNOUNCEMENT OFFER TICKER AT TOP */}
+        <MovingOfferBar texts={config.brand.offerTickerTexts} />
 
-      {/* STICKY CLASS HEADER GLOBAL NAVBAR */}
-      <Navbar
-        onOpenCart={() => setCartOpen(true)}
-        onOpenWishlist={() => setWishlistOpen(true)}
-        cartCount={totalItemsCount}
-        wishlistCount={wishlist.length}
-      />
+        {/* STICKY CLASS HEADER GLOBAL NAVBAR */}
+        <Navbar
+          onOpenCart={() => setCartOpen(true)}
+          onOpenWishlist={() => setWishlistOpen(true)}
+          cartCount={totalItemsCount}
+          wishlistCount={wishlist.length}
+          onProfileClick={handleProfileClick}
+          isAdminLoggedIn={isAdminLoggedIn}
+        />
+      </header>
 
       {/* ======================= MAIN SECTIONS LOOP ======================= */}
       <main className="relative">
@@ -239,11 +279,14 @@ export default function App() {
 
       {/* ======================= INTERACTIVE MODAL OVERLAYS & SHEETS ======================= */}
 
-      {/* A. DESIGN/ADMIN ACTIVE DRAWER (PERSISTENT BUTTON AT BOTTOM CORNER) */}
+      {/* A. DESIGN/ADMIN ACTIVE DRAWER (OPENED VIA DE-COUPLED PROFILE ACTION) */}
       <AdminPanel
         config={config}
         onUpdateConfig={handleUpdateConfig}
         onReset={handleResetConfig}
+        isOpen={adminPanelOpen}
+        setIsOpen={setAdminPanelOpen}
+        onLogout={handleAdminLogout}
       />
 
       {/* B. SHOPPING BAG SLIDEOUT DRAWER */}
@@ -456,7 +499,7 @@ export default function App() {
             {/* Close */}
             <button
               onClick={() => setBookingOpen(false)}
-              className="absolute top-4 right-4 p-2 rounded-full hover:bg-neutral-100 text-[#0E2F76] cursor-pointer"
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-neutral-100 text-[#0E2F76] cursor-pointer animate-scale"
             >
               <X className="h-5 w-5" />
             </button>
@@ -472,13 +515,13 @@ export default function App() {
             </div>
 
             {bookingSuccess ? (
-              <div className="py-8 text-center space-y-4">
+              <div className="py-8 text-center space-y-4 font-sans animate-scale">
                 <div className="h-16 w-16 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-md">
                   <Check className="h-8 w-8 stroke-[3]" />
                 </div>
                 <div className="space-y-1">
                   <h4 className="text-md font-bold text-[#0E2F76] uppercase">Session Requested!</h4>
-                  <p className="text-xs text-neutral-500 font-sans max-w-xs mx-auto leading-relaxed">
+                  <p className="text-xs text-neutral-500 max-w-xs mx-auto leading-relaxed">
                     Our luxury concierge team is coordinating with {bookingConsultant}. An invitation has been requested for {bookingDate} at {bookingTime}. Look out for custom styles in your inbox soon!
                   </p>
                 </div>
@@ -487,7 +530,7 @@ export default function App() {
               <form onSubmit={handleBookSession} className="space-y-4 text-left">
                 
                 <div>
-                  <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1">Your Name</label>
+                  <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Your Name</label>
                   <input
                     type="text"
                     required
@@ -499,7 +542,7 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1">Email Address</label>
+                  <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Email Address</label>
                   <input
                     type="email"
                     required
@@ -512,7 +555,7 @@ export default function App() {
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1">Select date</label>
+                    <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Select date</label>
                     <input
                       type="date"
                       required
@@ -522,7 +565,7 @@ export default function App() {
                     />
                   </div>
                   <div>
-                    <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1">Preferred Time</label>
+                    <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Preferred Time</label>
                     <input
                       type="time"
                       required
@@ -534,7 +577,7 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1">Personal Stylist Associate</label>
+                  <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Personal Stylist Associate</label>
                   <select
                     value={bookingConsultant}
                     onChange={(e) => setBookingConsultant(e.target.value)}
@@ -555,6 +598,80 @@ export default function App() {
               </form>
             )}
 
+          </div>
+        </div>
+      )}
+
+      {/* E. PREMIUM ADMIN LOGIN MODAL */}
+      {loginOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs select-none animate-fadeIn">
+          <div className="absolute inset-0 -z-10" onClick={() => setLoginOpen(false)} />
+
+          <div className="relative w-full max-w-md bg-[#F4FEFF] rounded-3xl overflow-hidden shadow-2xl p-6 sm:p-8 border border-[#A9C0E0]/30 animate-scale">
+            {/* Close */}
+            <button
+              onClick={() => setLoginOpen(false)}
+              className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/50 text-[#0E2F76] cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="text-center mb-6 space-y-2">
+              <User className="h-6 w-6 text-[#0E2F76] mx-auto" />
+              <h3 className="font-serif text-xl sm:text-2xl text-[#0E2F76] font-medium tracking-wide uppercase">
+                Admin Login
+              </h3>
+              <p className="text-xs text-neutral-500 max-w-xs mx-auto pt-1 font-sans leading-relaxed">
+                Please authenticate using your luxury studio coordinates to access boutique controls.
+              </p>
+            </div>
+
+            {/* Login Form */}
+            <form onSubmit={handleLoginSubmit} className="space-y-4 text-left">
+              <div>
+                <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Admin ID</label>
+                <input
+                  type="text"
+                  required
+                  value={loginId}
+                  onChange={(e) => {
+                    setLoginId(e.target.value);
+                    setLoginError('');
+                  }}
+                  className="w-full text-xs border border-neutral-300 rounded-md p-3 outline-none focus:ring-1 focus:ring-[#0E2F76] bg-white font-semibold text-neutral-800"
+                  placeholder="Enter Admin ID"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-neutral-600 uppercase mb-1 font-sans">Password</label>
+                <input
+                  type="password"
+                  required
+                  value={loginPassword}
+                  onChange={(e) => {
+                    setLoginPassword(e.target.value);
+                    setLoginError('');
+                  }}
+                  className="w-full text-xs border border-neutral-300 rounded-md p-3 outline-none focus:ring-1 focus:ring-[#0E2F76] bg-white font-semibold text-neutral-800"
+                  placeholder="••••••••"
+                />
+              </div>
+
+              {loginError && (
+                <div className="p-3 bg-red-50 text-red-600 rounded-lg text-xs font-semibold border border-red-200 flex items-center gap-2 font-sans animate-scale">
+                  <AlertCircle className="h-4 w-4 text-red-500 shrink-0" />
+                  <span>{loginError}</span>
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-4 bg-[#0E2F76] hover:bg-[#1a4497] text-white text-xs font-bold tracking-widest rounded-lg uppercase mt-4 transition-transform hover:scale-[1.01] shadow-lg cursor-pointer"
+              >
+                Access Control Panel
+              </button>
+            </form>
           </div>
         </div>
       )}

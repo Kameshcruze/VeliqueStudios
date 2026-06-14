@@ -6,10 +6,12 @@ interface AdminPanelProps {
   config: StudioConfig;
   onUpdateConfig: (newConfig: StudioConfig) => void;
   onReset: () => void;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+  onLogout: () => void;
 }
 
-export default function AdminPanel({ config, onUpdateConfig, onReset }: AdminPanelProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function AdminPanel({ config, onUpdateConfig, onReset, isOpen, setIsOpen, onLogout }: AdminPanelProps) {
   const [activeTab, setActiveTab] = useState<'hero' | 'categories' | 'products' | 'why' | 'countdown' | 'lookbook' | 'testimonials' | 'story' | 'json'>('hero');
   const [newText, setNewText] = useState('');
 
@@ -220,19 +222,6 @@ export default function AdminPanel({ config, onUpdateConfig, onReset }: AdminPan
 
   return (
     <>
-      {/* Floating Manager Badge */}
-      <button
-        id="btn-admin-config"
-        onClick={() => {
-          setIsOpen(true);
-          setJsonText(JSON.stringify(config, null, 2));
-        }}
-        className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-full bg-[#0E2F76] px-5 py-3 text-sm font-semibold text-white shadow-xl transition-all duration-300 hover:scale-105 hover:bg-[#1a4497] border border-[#A9C0E0]/30 cursor-pointer"
-      >
-        <Settings className="h-4 w-4 animate-spin-slow" />
-        <span>Boutique Control Panel</span>
-      </button>
-
       {/* Slide-out Edit Drawer */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs select-none">
@@ -249,12 +238,22 @@ export default function AdminPanel({ config, onUpdateConfig, onReset }: AdminPan
                   <p className="text-xs text-[#5A7EBA] -mt-0.5">Live Boutique Customizer & State Manager</p>
                 </div>
               </div>
-              <button
-                onClick={() => setIsOpen(false)}
-                className="rounded-full p-2 text-neutral-500 hover:bg-neutral-100 hover:text-black transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  type="button"
+                  onClick={onLogout}
+                  className="px-4 py-2 text-xs font-bold text-red-600 border border-red-300 hover:bg-red-50/80 rounded-md transition-colors cursor-pointer uppercase font-sans"
+                >
+                  Logout
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  className="rounded-full p-2 text-neutral-500 hover:bg-neutral-100 hover:text-black transition-colors cursor-pointer"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
             </div>
 
             {/* Quick Themes Presets */}
