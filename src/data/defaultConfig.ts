@@ -58,7 +58,7 @@ export const initialStudioConfig: StudioConfig = {
       name: "Floral Breeze Dress",
       price: 3599,
       description: "Breathable powder blue floral dress, featuring hand-pleated details, soft premium fabric, and an elegant waist sash.",
-      imageUrl: "https://images.unsplash.com/photo-1518049368024-1f251c42eeaa?auto=format&fit=crop&q=80&w=600",
+      imageUrl: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?auto=format&fit=crop&q=80&w=600",
       isNew: true,
       category: "cat-1"
     },
@@ -196,7 +196,7 @@ export const initialStudioConfig: StudioConfig = {
     title: "EXCLUSIVE PIECES AVAILABLE FOR A LIMITED TIME",
     subtitle: "Own our custom hand-crafted regal velvet evening gown at premium release price. Only 5 pieces manufactured worldwide.",
     countdownDate: "2026-10-31T23:59:59",
-    imageUrl: "https://images.unsplash.com/photo-1518049368024-1f251c42eeaa?auto=format&fit=crop&q=80&w=1200",
+    imageUrl: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&q=80&w=1200",
     buttonText: "SHOP LIMITED EDITION"
   },
   testimonials: [

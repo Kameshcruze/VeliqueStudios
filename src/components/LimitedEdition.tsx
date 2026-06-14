@@ -82,8 +82,8 @@ export default function LimitedEdition({ limited, onShopClick }: LimitedEditionP
               {limited.subtitle}
             </p>
 
-            {/* Glowing Digital luxury Timer Grid */}
-            <div className="pt-6 grid grid-cols-4 gap-4 max-w-sm select-none">
+            {/* Glowing Digital luxury Timer Flex */}
+            <div className="pt-6 flex flex-wrap items-center gap-2 sm:gap-4 select-none">
               
               <div className="flex flex-col items-center">
                 <span className="text-3xl sm:text-4xl font-mono font-bold tracking-widest text-[#F4FEFF] drop-shadow-[0_0_12px_rgba(244,254,255,0.4)]">
@@ -92,7 +92,7 @@ export default function LimitedEdition({ limited, onShopClick }: LimitedEditionP
                 <span className="text-[9px] font-bold text-[#A9C0E0] tracking-widest uppercase mt-1">DAYS</span>
               </div>
 
-              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#A9C0E0] flex items-center justify-center -mt-3">:</div>
+              <div className="text-xl sm:text-2xl font-bold font-mono text-[#A9C0E0] self-start mt-1">:</div>
 
               <div className="flex flex-col items-center">
                 <span className="text-3xl sm:text-4xl font-mono font-bold tracking-widest text-[#F4FEFF] drop-shadow-[0_0_12px_rgba(244,254,255,0.4)]">
@@ -101,7 +101,7 @@ export default function LimitedEdition({ limited, onShopClick }: LimitedEditionP
                 <span className="text-[9px] font-bold text-[#A9C0E0] tracking-widest uppercase mt-1">HOURS</span>
               </div>
 
-              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#A9C0E0] flex items-center justify-center -mt-3">:</div>
+              <div className="text-xl sm:text-2xl font-bold font-mono text-[#A9C0E0] self-start mt-1">:</div>
 
               <div className="flex flex-col items-center">
                 <span className="text-3xl sm:text-4xl font-mono font-bold tracking-widest text-[#F4FEFF] drop-shadow-[0_0_12px_rgba(244,254,255,0.4)]">
@@ -110,7 +110,7 @@ export default function LimitedEdition({ limited, onShopClick }: LimitedEditionP
                 <span className="text-[9px] font-bold text-[#A9C0E0] tracking-widest uppercase mt-1">MINUTES</span>
               </div>
 
-              <div className="text-2xl sm:text-3xl font-bold font-mono text-[#A9C0E0] flex items-center justify-center -mt-3">:</div>
+              <div className="text-xl sm:text-2xl font-bold font-mono text-[#A9C0E0] self-start mt-1">:</div>
 
               <div className="flex flex-col items-center">
                 <span className="text-3xl sm:text-4xl font-mono font-bold tracking-widest text-[#F4FEFF] drop-shadow-[0_0_12px_rgba(244,254,255,0.4)]">
